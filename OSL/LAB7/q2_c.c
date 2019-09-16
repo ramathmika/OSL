@@ -11,24 +11,22 @@
 #define BUFFER_SIZE PIPE_BUF
 int main(){
 	int pipe_fd,res,open_mode=O_RDONLY;
-	char buffer[BUFFER_SIZE + 1];
-	int bytes_read = 0;
+	int buffer[BUFFER_SIZE + 1];
 	memset(buffer,'\0',sizeof(buffer));
 	printf("Process %d opening FIFO O_RDONLY\n",getpid());
 	pipe_fd = open(FIFO_NAME,open_mode);
 	printf("Process %d result %d\n",getpid(),pipe_fd);
 	int i = 0;
+	printf("Integers are:");
 	if(pipe_fd != -1){
-		while(i<4){
-			res = read(pipe_fd,buffer[0],1);
-			printf("%s\n",buffer);
-			i++;
-		}
+		res = read(pipe_fd,buffer,4*sizeof(int));
+		for(int i=0;i<4;i++)
+			printf("%d ",buffer[i]);
 		(void)close(pipe_fd);
 	}
 	else {
 		exit(EXIT_FAILURE);
 	}
-	printf("Process %d finished, %d bytes read\n",getpid(),bytes_read);
+	printf("\n");
 	exit(EXIT_SUCCESS);
 }
